@@ -1,5 +1,6 @@
 package backend.academy;
 
+import backend.academy.entities.Cell;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

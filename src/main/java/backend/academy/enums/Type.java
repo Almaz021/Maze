@@ -1,4 +1,4 @@
-package backend.academy;
+package backend.academy.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
