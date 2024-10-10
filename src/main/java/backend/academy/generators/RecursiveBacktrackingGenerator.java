@@ -1,6 +1,6 @@
 package backend.academy.generators;
 
-import backend.academy.Maze;
+import backend.academy.entities.Maze;
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
 import backend.academy.enums.Type;

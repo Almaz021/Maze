@@ -1,6 +1,6 @@
 package backend.academy.interfaces;
 
-import backend.academy.Maze;
+import backend.academy.entities.Maze;
 import backend.academy.entities.Coordinate;
 import java.util.List;
 
