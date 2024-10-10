@@ -1,8 +1,8 @@
 package backend.academy.generators;
 
-import backend.academy.entities.Maze;
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
+import backend.academy.entities.Maze;
 import backend.academy.enums.Type;
 import backend.academy.interfaces.Generator;
 import java.security.SecureRandom;
