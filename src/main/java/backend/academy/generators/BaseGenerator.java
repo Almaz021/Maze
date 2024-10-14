@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BaseGenerator {
-    private static final int ONE = 1;
-    private static final int TWO = 2;
-    private static final int THREE = 3;
-    private static final int FOUR = 4;
+    protected static final int ONE = 1;
+    protected static final int TWO = 2;
+    protected static final int THREE = 3;
+    protected static final int FOUR = 4;
     protected static final int FIVE = 5;
 
     protected Cell[][] grid;
