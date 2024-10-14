@@ -33,10 +33,7 @@ public class RecursiveBacktrackingGenerator extends BaseGenerator implements Gen
             Cell top = cells.peek();
             int path = selectPath(top);
             if (path != -1) {
-                int xWall = calculateWallX(top.coordinate().col(), path);
-                int yWall = calculateWallY(top.coordinate().row(), path);
-                int xPassage = calculatePassageX(top.coordinate().col(), path);
-                int yPassage = calculatePassageY(top.coordinate().row(), path);
+                calculateWallAndPassage(top, path);
 
                 grid[yWall][xWall] = new Cell(new Coordinate(yWall, xWall), getRandomCellType());
 
