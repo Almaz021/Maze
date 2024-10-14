@@ -15,6 +15,11 @@ public class BaseGenerator {
     protected static final int FOUR = 4;
     protected static final int FIVE = 5;
 
+    protected int xWall;
+    protected int yWall;
+    protected int xPassage;
+    protected int yPassage;
+
     protected Cell[][] grid;
     protected final SecureRandom random;
 
@@ -42,11 +47,15 @@ public class BaseGenerator {
     }
 
     public boolean checkPath(Cell point, int path) {
-        int xWall = calculateWallX(point.coordinate().col(), path);
-        int yWall = calculateWallY(point.coordinate().row(), path);
-        int xPassage = calculatePassageX(point.coordinate().col(), path);
-        int yPassage = calculatePassageY(point.coordinate().row(), path);
+        calculateWallAndPassage(point, path);
         return grid[yWall][xWall].type() == Type.WALL && grid[yPassage][xPassage].type() == Type.DEFAULT;
+    }
+
+    public void calculateWallAndPassage(Cell point, int path) {
+        xWall = calculateWallX(point.coordinate().col(), path);
+        yWall = calculateWallY(point.coordinate().row(), path);
+        xPassage = calculatePassageX(point.coordinate().col(), path);
+        yPassage = calculatePassageY(point.coordinate().row(), path);
     }
 
     public int calculateWallX(int col, int path) {
