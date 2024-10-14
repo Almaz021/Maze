@@ -2,6 +2,7 @@ package backend.academy.generators;
 
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
+import backend.academy.enums.Direction;
 import backend.academy.enums.Type;
 import java.security.SecureRandom;
 import java.util.stream.IntStream;
@@ -9,12 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BaseGenerator {
-    protected static final int ONE = 1;
-    protected static final int TWO = 2;
-    protected static final int THREE = 3;
-    protected static final int FOUR = 4;
-    protected static final int FIVE = 5;
-
     protected int xWall;
     protected int yWall;
     protected int xPassage;
@@ -46,46 +41,46 @@ public class BaseGenerator {
         return grid[h][w];
     }
 
-    public boolean checkPath(Cell point, int path) {
-        calculateWallAndPassage(point, path);
+    public boolean checkPath(Cell point, Direction direction) {
+        calculateWallAndPassage(point, direction);
         return grid[yWall][xWall].type() == Type.WALL && grid[yPassage][xPassage].type() == Type.DEFAULT;
     }
 
-    public void calculateWallAndPassage(Cell point, int path) {
-        xWall = calculateWallX(point.coordinate().col(), path);
-        yWall = calculateWallY(point.coordinate().row(), path);
-        xPassage = calculatePassageX(point.coordinate().col(), path);
-        yPassage = calculatePassageY(point.coordinate().row(), path);
+    public void calculateWallAndPassage(Cell point, Direction direction) {
+        xWall = calculateWallX(point.coordinate().col(), direction);
+        yWall = calculateWallY(point.coordinate().row(), direction);
+        xPassage = calculatePassageX(point.coordinate().col(), direction);
+        yPassage = calculatePassageY(point.coordinate().row(), direction);
     }
 
-    public int calculateWallX(int col, int path) {
-        return switch (path) {
-            case TWO -> col + ONE;
-            case FOUR -> col - ONE;
+    public int calculateWallX(int col, Direction direction) {
+        return switch (direction) {
+            case RIGHT -> col + 1;
+            case LEFT -> col - 1;
             default -> col;
         };
     }
 
-    public int calculateWallY(int row, int path) {
-        return switch (path) {
-            case ONE -> row - ONE;
-            case THREE -> row + ONE;
+    public int calculateWallY(int row, Direction direction) {
+        return switch (direction) {
+            case UP -> row - 1;
+            case DOWN -> row + 1;
             default -> row;
         };
     }
 
-    public int calculatePassageX(int col, int path) {
-        return switch (path) {
-            case TWO -> col + TWO;
-            case FOUR -> col - TWO;
+    public int calculatePassageX(int col, Direction direction) {
+        return switch (direction) {
+            case RIGHT -> col + 2;
+            case LEFT -> col - 2;
             default -> col;
         };
     }
 
-    public int calculatePassageY(int row, int path) {
-        return switch (path) {
-            case ONE -> row - TWO;
-            case THREE -> row + TWO;
+    public int calculatePassageY(int row, Direction direction) {
+        return switch (direction) {
+            case UP -> row - 2;
+            case DOWN -> row + 2;
             default -> row;
         };
     }

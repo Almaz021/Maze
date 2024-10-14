@@ -3,12 +3,13 @@ package backend.academy.generators;
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
 import backend.academy.entities.Maze;
+import backend.academy.enums.Direction;
 import backend.academy.interfaces.Generator;
 import java.security.SecureRandom;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 
 public class RecursiveBacktrackingGenerator extends BaseGenerator implements Generator {
     public RecursiveBacktrackingGenerator(SecureRandom random) {
@@ -31,9 +32,9 @@ public class RecursiveBacktrackingGenerator extends BaseGenerator implements Gen
 
         while (!cells.isEmpty()) {
             Cell top = cells.peek();
-            int path = selectPath(top);
-            if (path != -1) {
-                calculateWallAndPassage(top, path);
+            Direction direction = selectDirection(top);
+            if (direction != null) {
+                calculateWallAndPassage(top, direction);
 
                 grid[yWall][xWall] = new Cell(new Coordinate(yWall, xWall), getRandomCellType());
 
@@ -46,19 +47,21 @@ public class RecursiveBacktrackingGenerator extends BaseGenerator implements Gen
         }
     }
 
-    public int selectPath(Cell point) {
-        ArrayList<Integer> paths = new ArrayList<>(Arrays.asList(ONE, TWO, THREE, FOUR));
+    public Direction selectDirection(Cell point) {
+        ArrayList<Direction> paths = new ArrayList<>(List.of(Direction.values()));
 
-        int selectedPath = -1;
-        while (!paths.isEmpty() && selectedPath == -1) {
-            int path = paths.get(random.nextInt(paths.size()));
-            if (checkPath(point, path)) {
-                selectedPath = path;
+        Direction selectedPath = Direction.UP;
+        boolean flag = false;
+        while (!paths.isEmpty() && !flag) {
+            Direction direction = paths.get(random.nextInt(paths.size()));
+            if (checkPath(point, direction)) {
+                flag = true;
+                selectedPath = direction;
             } else {
-                paths.remove((Integer) path);
+                paths.remove(direction);
             }
         }
-        return selectedPath;
-    }
 
+        return flag ? selectedPath : null;
+    }
 }

@@ -3,6 +3,7 @@ package backend.academy.generators;
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
 import backend.academy.entities.Maze;
+import backend.academy.enums.Direction;
 import backend.academy.enums.Type;
 import backend.academy.interfaces.Generator;
 import java.security.SecureRandom;
@@ -27,10 +28,10 @@ public class PrimGenerator extends BaseGenerator implements Generator {
             new Cell(new Coordinate(startPoint.coordinate().row(), startPoint.coordinate().col()), getRandomCellType());
         grid[startPoint.coordinate().row()][startPoint.coordinate().col()] = selectedCell;
         do {
-            for (int i = 1; i < FIVE; i++) {
-                if (checkPath(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], i)) {
-                    int xPassage = calculatePassageX(selectedCell.coordinate().col(), i);
-                    int yPassage = calculatePassageY(selectedCell.coordinate().row(), i);
+            for (Direction direction : Direction.values()) {
+                if (checkPath(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
+                    int xPassage = calculatePassageX(selectedCell.coordinate().col(), direction);
+                    int yPassage = calculatePassageY(selectedCell.coordinate().row(), direction);
                     if (!cells.contains(grid[yPassage][xPassage])) {
                         cells.add(grid[yPassage][xPassage]);
                     }
@@ -43,11 +44,11 @@ public class PrimGenerator extends BaseGenerator implements Generator {
                 new Cell(new Coordinate(selectedCell.coordinate().row(), selectedCell.coordinate().col()),
                     getRandomCellType());
 
-            for (int i = 1; i < FIVE; i++) {
-                if (checkIsPassage(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], i)) {
+            for (Direction direction : Direction.values()) {
+                if (checkIsPassage(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
 
-                    int xPassage = calculatePassageX(selectedCell.coordinate().col(), i);
-                    int yPassage = calculatePassageY(selectedCell.coordinate().row(), i);
+                    int xPassage = calculatePassageX(selectedCell.coordinate().col(), direction);
+                    int yPassage = calculatePassageY(selectedCell.coordinate().row(), direction);
                     passages.add(grid[yPassage][xPassage]);
                 }
             }
@@ -65,8 +66,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
 
     }
 
-    public boolean checkIsPassage(Cell point, int path) {
-        calculateWallAndPassage(point, path);
+    public boolean checkIsPassage(Cell point, Direction direction) {
+        calculateWallAndPassage(point, direction);
         return grid[yWall][xWall].type() == Type.WALL && grid[yPassage][xPassage].type() != Type.DEFAULT;
     }
 
