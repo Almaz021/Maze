@@ -37,7 +37,7 @@ public class BaseSolver {
     public void searchPath(Coordinate start, Coordinate end) {
         Coordinate newPoint = end;
         list.add(newPoint);
-        while (!newPoint.equals(start) && (newPoint.equals(selectMin(newPoint)) && list.size() > 1)) {
+        while (check(newPoint, start)) {
             if (newPoint.equals(selectMin(newPoint))) {
                 list.remove(newPoint);
                 restricted.add(newPoint);
@@ -94,5 +94,16 @@ public class BaseSolver {
             case RIGHT -> point.col() + 1;
             default -> point.col();
         };
+    }
+
+    public boolean check(Coordinate newPoint, Coordinate start) {
+        if (!newPoint.equals(start)) {
+            if (newPoint.equals(selectMin(newPoint)) && list.size() > 1) {
+                return true;
+            } else {
+                return !newPoint.equals(selectMin(newPoint)) || list.size() > 1;
+            }
+        }
+        return false;
     }
 }
