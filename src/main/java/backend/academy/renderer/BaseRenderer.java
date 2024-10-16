@@ -25,6 +25,9 @@ public class BaseRenderer implements Renderer {
     }
 
     public StringBuilder render(Maze maze, List<Coordinate> path) {
+        if (path != null && path.isEmpty()) {
+            return new StringBuilder("NO PATH FOUND");
+        }
         StringBuilder result = new StringBuilder();
         Coordinate start = path != null ? path.getFirst() : null;
         Coordinate end = path != null ? path.getLast() : null;
