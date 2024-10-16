@@ -7,6 +7,7 @@ import backend.academy.enums.Direction;
 import backend.academy.enums.Type;
 import backend.academy.settings.Settings;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BaseSolver {
@@ -46,7 +47,7 @@ public class BaseSolver {
                 list.add(newPoint);
             }
         }
-
+        Collections.reverse(list);
     }
 
     public Coordinate selectMin(Coordinate point) {
