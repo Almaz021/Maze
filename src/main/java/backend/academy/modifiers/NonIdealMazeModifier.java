@@ -6,12 +6,14 @@ import backend.academy.entities.Maze;
 import backend.academy.enums.Type;
 import backend.academy.interfaces.Modifier;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class NonIdealMazeModifier implements Modifier {
-    private static final int THREE = 3;
-    private static final double NUM = 0.1;
+    private static final double WALL_DELETION_FACTOR = 0.05;
     private final Cell[][] grid;
     private final SecureRandom random;
 
@@ -22,13 +24,32 @@ public class NonIdealMazeModifier implements Modifier {
     }
 
     public void deleteSomeWalls(int height, int width) {
-        int range = (int) Math.ceil((double) ((height - THREE) * (width - THREE)) / 2 * NUM);
-        for (int i = 0; i < range; i++) {
-            int h = random.nextInt(0, height);
-            int w = random.nextInt(0, width);
-            if (grid[h][w].type() == Type.WALL) {
-                grid[h][w] = new Cell(new Coordinate(h, w), Type.DEFAULT);
+        List<Coordinate> wallCoordinates = new ArrayList<>();
+
+        for (int h = 0; h < height; h++) {
+            for (int w = 0; w < width; w++) {
+                if (grid[h][w].type() == Type.WALL) {
+                    wallCoordinates.add(new Coordinate(h, w));
+                }
             }
         }
+        Collections.shuffle(wallCoordinates, random);
+
+        int wallsToDelete = (int) Math.ceil(wallCoordinates.size() * WALL_DELETION_FACTOR);
+        for (int i = 0; i < wallsToDelete && i < wallCoordinates.size(); i++) {
+            Coordinate coordinate = wallCoordinates.get(i);
+            grid[coordinate.row()][coordinate.col()] = new Cell(coordinate, getRandomCellType());
+        }
+    }
+
+    public Type getRandomCellType() {
+        Type[] types = new Type[] {
+            Type.NORMAL,
+            Type.NORMAL,
+            Type.NORMAL,
+            Type.ICE,
+            Type.SAND
+        };
+        return types[random.nextInt(types.length)];
     }
 }
