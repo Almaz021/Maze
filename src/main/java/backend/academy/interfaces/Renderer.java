@@ -5,7 +5,7 @@ import backend.academy.entities.Maze;
 import java.util.List;
 
 public interface Renderer {
-    String render(Maze maze);
+    StringBuilder render(Maze maze);
 
-    String render(Maze maze, List<Coordinate> path);
+    StringBuilder render(Maze maze, List<Coordinate> path);
 }
