@@ -52,4 +52,9 @@ public class NonIdealMazeModifier implements Modifier {
         };
         return types[random.nextInt(types.length)];
     }
+
+    @Override
+    public String toString() {
+        return "NonIdealMazeModifier";
+    }
 }
