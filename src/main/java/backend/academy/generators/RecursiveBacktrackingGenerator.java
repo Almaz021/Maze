@@ -64,4 +64,9 @@ public class RecursiveBacktrackingGenerator extends BaseGenerator implements Gen
 
         return flag ? selectedPath : null;
     }
+
+    @Override
+    public String toString() {
+        return "RecursiveBacktrackingGenerator";
+    }
 }

@@ -29,4 +29,9 @@ public class DFSSolver extends BaseSolver implements Solver {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "DFSSolver";
+    }
 }

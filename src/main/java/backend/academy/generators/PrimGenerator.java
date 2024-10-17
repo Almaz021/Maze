@@ -71,4 +71,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
         return grid[yWall][xWall].type() == Type.WALL && grid[yPassage][xPassage].type() != Type.DEFAULT;
     }
 
+    @Override
+    public String toString() {
+        return "PrimGenerator";
+    }
 }

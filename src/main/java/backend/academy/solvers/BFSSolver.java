@@ -45,4 +45,8 @@ public class BFSSolver extends BaseSolver implements Solver {
         }
     }
 
+    @Override
+    public String toString() {
+        return "BFSSolver";
+    }
 }
