@@ -1,5 +1,7 @@
 package backend.academy;
 
+import backend.academy.interfaces.Generator;
+import backend.academy.interfaces.Solver;
 import backend.academy.settings.Settings;
 import java.io.PrintWriter;
 import lombok.Getter;
@@ -17,7 +19,7 @@ public class MainInterface {
 
     public void chooseDimension(String dimensionType, int min, int max) {
         currMessage = "Choose a " + dimensionType + "! Enter an odd number between " + min + " and " + max
-            + " or other to select random";
+            + " or other symbols to select random";
         printMessage(currMessage);
     }
 
@@ -34,7 +36,7 @@ public class MainInterface {
             Select generator:
             1. RecursiveBacktrackingGenerator
             2. PrimGenerator
-            Type number of generator you want to choose or other symbol to choose random""";
+            Type number of generator you want to choose or other symbols to choose random""";
         printMessage(currMessage);
     }
 
@@ -43,27 +45,50 @@ public class MainInterface {
             Select solver:
             1. BFSSolver
             2. DFSSolver
-            Type number of solver you want to choose or other symbol to choose random""";
+            Type number of solver you want to choose or other symbols to choose random""";
         printMessage(currMessage);
     }
 
     public void choosePointCoordinates() {
-        currMessage = "Enter two numbers separated by a space starting from (1) to (Maze size - 2). For example:10 25";
+        currMessage =
+            "Enter col and row separated by one space starting from (1) to (Maze size - 2). For example:10 25";
         printMessage(currMessage);
     }
 
-    public void chosenSize() {
-        currMessage = "Great! Now you need to choose generator for your Maze!";
-        printMessage(currMessage);
-    }
-
-    public void chosenGenerator() {
-        currMessage = "Good! Now you need to choose solver for your Maze!";
-        printMessage(currMessage);
-    }
-
-    public void chosenSolver() {
+    public void choosePoint() {
         currMessage = "Cool! Now you need to enter two points between which you want to find the path!";
+        printMessage(currMessage);
+    }
+
+    public void chosenSize(int height, int width) {
+        currMessage = "Width: " + width + " Height: " + height +  "\n\n"
+            + "Great! Now you need to choose generator for your Maze!";
+        printMessage(currMessage);
+    }
+
+    public void chosenGenerator(Generator generator) {
+        currMessage = "Selected generator: " + generator.toString() + "\n"
+            + "Good! Now you need to choose solver for your Maze!";
+        printMessage(currMessage);
+    }
+
+    public void chosenSolver(Solver solver) {
+        currMessage = "Selected solver: " + solver.toString() + "\n";
+        printMessage(currMessage);
+    }
+
+    public void chosenPoint(int x, int y) {
+        currMessage = "Chosen point: x = " + x + " y = " + y + "\n";
+        printMessage(currMessage);
+    }
+
+    public void chooseRandom() {
+        currMessage = "Wrong! Number will be selected automatically";
+        printMessage(currMessage);
+    }
+
+    public void onlyNumbers() {
+        currMessage = "You need to enter only numbers separated by one space!";
         printMessage(currMessage);
     }
 
@@ -79,6 +104,11 @@ public class MainInterface {
 
     public void calculatePath() {
         currMessage = "Calculating the path...\n";
+        printMessage(currMessage);
+    }
+
+    public void generateMaze() {
+        currMessage = "Nice! Generating Maze...\n";
         printMessage(currMessage);
     }
 
