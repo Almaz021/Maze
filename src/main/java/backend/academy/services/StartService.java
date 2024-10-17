@@ -5,8 +5,10 @@ import backend.academy.entities.Coordinate;
 import backend.academy.entities.Maze;
 import backend.academy.enums.Type;
 import backend.academy.factories.GeneratorFactory;
+import backend.academy.factories.ModifierFactory;
 import backend.academy.factories.SolverFactory;
 import backend.academy.interfaces.Generator;
+import backend.academy.interfaces.Modifier;
 import backend.academy.interfaces.Solver;
 import backend.academy.renderer.BaseRenderer;
 import backend.academy.settings.Settings;
@@ -29,6 +31,7 @@ public class StartService {
     public void start() throws IOException {
         Generator generator;
         Solver solver;
+        Modifier modifier;
         mainInterface.helloMessage();
 
         mainInterface.chooseWidth();
@@ -57,6 +60,19 @@ public class StartService {
         maze = generator.generate(height, width);
         StringBuilder mazeString = renderer.render(maze);
         mainInterface.showMaze(mazeString);
+
+        mainInterface.requestForModification();
+        String answer = getInput();
+        if ("YES".equalsIgnoreCase(answer)) {
+            mainInterface.chooseModifier();
+            String m = getInput();
+            modifier = selectModifier(m);
+            mainInterface.chosenModifier(modifier);
+            mainInterface.modifyMaze();
+            modifier.modify(height, width);
+            mazeString = renderer.render(maze);
+            mainInterface.showMaze(mazeString);
+        }
 
         String coords;
         int firstPointX;
@@ -92,6 +108,8 @@ public class StartService {
         mazeString = renderer.render(maze, path);
         mainInterface.showMaze(mazeString);
 
+        mainInterface.finish();
+
     }
 
     public String getInput() throws IOException {
@@ -117,10 +135,14 @@ public class StartService {
     public boolean checkCoordinates(String coordinates, int height, int width) {
         try {
             String[] parts = coordinates.split(" ");
+            if (parts.length != 2) {
+                mainInterface.onlyNumbers();
+                return true;
+            }
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
 
-            boolean inBounds = (0 <= x && x <= width && 0 <= y && y < height);
+            boolean inBounds = (0 <= x && x < width && 0 <= y && y < height);
 
             if (inBounds) {
                 if (checkPassage(y, x)) {
@@ -154,5 +176,9 @@ public class StartService {
 
     public Solver selectSolver(String solver) {
         return new SolverFactory(random).selectSolver(solver);
+    }
+
+    public Modifier selectModifier(String modifier) {
+        return new ModifierFactory(maze, random).selectModifier(modifier);
     }
 }
