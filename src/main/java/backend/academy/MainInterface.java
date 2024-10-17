@@ -1,6 +1,7 @@
 package backend.academy;
 
 import backend.academy.interfaces.Generator;
+import backend.academy.interfaces.Modifier;
 import backend.academy.interfaces.Solver;
 import backend.academy.settings.Settings;
 import java.io.PrintWriter;
@@ -18,7 +19,7 @@ public class MainInterface {
     }
 
     public void chooseDimension(String dimensionType, int min, int max) {
-        currMessage = "Choose a " + dimensionType + "! Enter an odd number between " + min + " and " + max
+        currMessage = "\nChoose a " + dimensionType + "! Enter an odd number between " + min + " and " + max
             + " or other symbols to select random";
         printMessage(currMessage);
     }
@@ -49,6 +50,14 @@ public class MainInterface {
         printMessage(currMessage);
     }
 
+    public void chooseModifier() {
+        currMessage = """
+            \nSelect modifier:
+            1. NonIdealMazeModifier
+            Type number of modifier you want to choose or other symbols to choose random""";
+        printMessage(currMessage);
+    }
+
     public void choosePointCoordinates() {
         currMessage =
             "Enter col and row separated by one space starting from (1) to (Maze size - 2). For example:10 25";
@@ -56,34 +65,44 @@ public class MainInterface {
     }
 
     public void choosePoint() {
-        currMessage = "Cool! Now you need to enter two points between which you want to find the path!";
+        currMessage = "Cool! Now you need to enter two points between which you want to find the path!\n";
         printMessage(currMessage);
     }
 
     public void chosenSize(int height, int width) {
-        currMessage = "Width: " + width + " Height: " + height +  "\n\n"
-            + "Great! Now you need to choose generator for your Maze!";
+        currMessage = "\nWidth: " + width + " Height: " + height + "\n"
+            + "\nGreat! Now you need to choose generator for your Maze!\n";
         printMessage(currMessage);
     }
 
     public void chosenGenerator(Generator generator) {
-        currMessage = "Selected generator: " + generator.toString() + "\n"
-            + "Good! Now you need to choose solver for your Maze!";
+        currMessage = "\nSelected generator: " + generator.toString() + "\n"
+            + "\nGood! Now you need to choose solver for your Maze!\n";
         printMessage(currMessage);
     }
 
     public void chosenSolver(Solver solver) {
-        currMessage = "Selected solver: " + solver.toString() + "\n";
+        currMessage = "\nSelected solver: " + solver.toString() + "\n";
+        printMessage(currMessage);
+    }
+
+    public void chosenModifier(Modifier modifier) {
+        currMessage = "\nSelected modifier: " + modifier.toString() + "\n";
         printMessage(currMessage);
     }
 
     public void chosenPoint(int x, int y) {
-        currMessage = "Chosen point: x = " + x + " y = " + y + "\n";
+        currMessage = "\nChosen point: x = " + x + " y = " + y + "\n";
         printMessage(currMessage);
     }
 
     public void chooseRandom() {
         currMessage = "Wrong! Number will be selected automatically";
+        printMessage(currMessage);
+    }
+
+    public void requestForModification() {
+        currMessage = "Do you want to modify the maze? Write YES or NO (Default is NO)";
         printMessage(currMessage);
     }
 
@@ -112,8 +131,18 @@ public class MainInterface {
         printMessage(currMessage);
     }
 
+    public void modifyMaze() {
+        currMessage = "Modifying Maze...\n";
+        printMessage(currMessage);
+    }
+
     public void showMaze(StringBuilder maze) {
         currMessage = maze.toString();
+        printMessage(currMessage);
+    }
+
+    public void finish() {
+        currMessage = "Work Finished!";
         printMessage(currMessage);
     }
 
