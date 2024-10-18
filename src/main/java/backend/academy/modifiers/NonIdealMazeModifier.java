@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class NonIdealMazeModifier implements Modifier {
+    private static final int NORMAL_WEIGHT = 60;
+    private static final int OTHER_WEIGHT = 20;
+    private static final int TOTAL_WEIGHT = 100;
     private static final double WALL_DELETION_FACTOR = 0.05;
     private final Cell[][] grid;
     private final SecureRandom random;
@@ -43,14 +46,14 @@ public class NonIdealMazeModifier implements Modifier {
     }
 
     public Type getRandomCellType() {
-        Type[] types = new Type[] {
-            Type.NORMAL,
-            Type.NORMAL,
-            Type.NORMAL,
-            Type.ICE,
-            Type.SAND
-        };
-        return types[random.nextInt(types.length)];
+        int randomNum = random.nextInt(TOTAL_WEIGHT);
+        if (randomNum < NORMAL_WEIGHT) {
+            return Type.NORMAL;
+        } else if (randomNum < NORMAL_WEIGHT + OTHER_WEIGHT) {
+            return Type.ICE;
+        } else {
+            return Type.SAND;
+        }
     }
 
     @Override

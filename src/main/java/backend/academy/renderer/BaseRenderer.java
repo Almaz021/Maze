@@ -3,21 +3,21 @@ package backend.academy.renderer;
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
 import backend.academy.entities.Maze;
+import backend.academy.enums.Color;
 import backend.academy.enums.Type;
 import backend.academy.interfaces.Renderer;
 import java.util.List;
+import static backend.academy.enums.Color.BLACK;
+import static backend.academy.enums.Color.CYAN;
+import static backend.academy.enums.Color.GREEN;
+import static backend.academy.enums.Color.ORANGE;
+import static backend.academy.enums.Color.PURPLE;
+import static backend.academy.enums.Color.RED;
+import static backend.academy.enums.Color.RESET;
+import static backend.academy.enums.Color.WHITE;
+import static backend.academy.enums.Color.YELLOW;
 
 public class BaseRenderer implements Renderer {
-    private static final String BLACK = "\u001B[38;2;0;0;0m";
-    private static final String WHITE = "\u001B[38;2;240;240;240m";
-    private static final String GREEN = "\u001B[38;2;21;212;0m";
-    private static final String RED = "\u001B[38;2;222;150;150m";
-    private static final String CYAN = "\u001B[38;2;123;255;255m";
-    private static final String PURPLE = "\u001B[38;2;195;161;255m";
-    private static final String YELLOW = "\u001B[38;2;255;248;163m";
-    private static final String ORANGE = "\u001B[38;2;255;111;5m";
-
-    private static final String RESET = "\u001B[0m";
     private static final char RECTANGLE = '█';
 
     public StringBuilder render(Maze maze) {
@@ -49,16 +49,16 @@ public class BaseRenderer implements Renderer {
     }
 
     public void renderCell(StringBuilder result, Cell cell, boolean isOnPath) {
-        String color = getColor(cell, isOnPath);
+        String color = getColor(cell, isOnPath).colorCode();
         result.append(color).append(RECTANGLE).append(RECTANGLE).append(RESET);
     }
 
     private void renderCell(StringBuilder result, Type specialType) {
-        String color = getSpecialColor(specialType);
+        String color = getSpecialColor(specialType).colorCode();
         result.append(color).append(RECTANGLE).append(RECTANGLE).append(RESET);
     }
 
-    public String getColor(Cell cell, boolean isOnPath) {
+    public Color getColor(Cell cell, boolean isOnPath) {
         return switch (cell.type()) {
             case BEDROCK -> PURPLE;
             case NORMAL -> isOnPath ? RED : BLACK;
@@ -69,7 +69,7 @@ public class BaseRenderer implements Renderer {
         };
     }
 
-    private String getSpecialColor(Type type) {
+    private Color getSpecialColor(Type type) {
         return switch (type) {
             case START -> GREEN;
             case END -> ORANGE;

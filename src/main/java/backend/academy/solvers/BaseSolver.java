@@ -59,9 +59,7 @@ public class BaseSolver {
         for (Direction direction : Direction.values()) {
             int row = calculateRow(point, direction);
             int col = calculateCol(point, direction);
-            if (checkIndexes(row, col) && !list.contains(grid[row][col].coordinate())
-                && tempGrid[row][col] < tempGrid[cell.coordinate().row()][cell.coordinate().col()] + 1
-                && grid[row][col].type() != Type.BEDROCK && !restricted.contains(grid[row][col].coordinate())) {
+            if (bigCheck(row, col, cell)) {
                 cell = grid[row][col];
             }
         }
@@ -74,6 +72,12 @@ public class BaseSolver {
             List.of(Type.NORMAL, Type.ICE, Type.SAND).contains(cell.type()) && (!visited.contains(cell.coordinate())
                 || tempGrid[cell.coordinate().row()][cell.coordinate().col()] > tempGrid[point.row()][point.col()]
                 + grid[cell.coordinate().row()][cell.coordinate().col()].type().type());
+    }
+
+    public boolean bigCheck(int row, int col, Cell cell) {
+        return (checkIndexes(row, col) && !list.contains(grid[row][col].coordinate())
+            && tempGrid[row][col] < tempGrid[cell.coordinate().row()][cell.coordinate().col()] + 1
+            && grid[row][col].type() != Type.BEDROCK && !restricted.contains(grid[row][col].coordinate()));
     }
 
     public boolean checkIndexes(int row, int col) {
