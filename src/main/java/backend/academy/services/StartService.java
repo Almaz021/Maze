@@ -18,9 +18,8 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2 @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class StartService {
     private final BufferedReader reader;
     private final BaseRenderer renderer;
@@ -67,8 +66,10 @@ public class StartService {
             String m = getInput();
             modifier = selectModifier(m);
             mainInterface.chosenModifier(modifier);
+
             mainInterface.modifyMaze();
-            modifier.modify(height, width);
+            maze = modifier.modify(height, width);
+
             mazeString = renderer.render(maze);
             mainInterface.showMaze(mazeString);
         }

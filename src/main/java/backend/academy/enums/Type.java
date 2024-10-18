@@ -6,7 +6,15 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Type {
-    DEFAULT(-1), NORMAL(1), SAND(5), ICE(0), WALL(100), BEDROCK(1000), START(Integer.MIN_VALUE), END(Integer.MAX_VALUE);
+    DEFAULT(-1),
+    NORMAL(1),
+    SAND(5),
+    ICE(0),
+    WALL(100),
+    BEDROCK(1000),
+    START(Integer.MIN_VALUE),
+    END(Integer.MAX_VALUE);
+
     private final int type;
 
     @Override public String toString() {

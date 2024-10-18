@@ -29,15 +29,20 @@ public class BFSSolver extends BaseSolver implements Solver {
     public void bfs(Coordinate point) {
         queue.add(point);
         visited.add(point);
+
         while (!queue.isEmpty()) {
             Coordinate current = queue.poll();
+
             for (Direction direction : Direction.values()) {
                 if (checkDirection(current, direction)) {
                     int row = calculateRow(current, direction);
                     int col = calculateCol(current, direction);
+
                     Coordinate newPoint = new Coordinate(row, col);
+
                     queue.add(newPoint);
                     visited.add(newPoint);
+
                     tempGrid[newPoint.row()][newPoint.col()] = Math.min(tempGrid[newPoint.row()][newPoint.col()],
                         tempGrid[current.row()][current.col()] + grid[newPoint.row()][newPoint.col()].type().type());
                 }
