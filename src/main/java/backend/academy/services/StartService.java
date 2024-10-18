@@ -56,7 +56,6 @@ public class StartService {
 
         mainInterface.generateMaze();
 
-        // Maze generation
         maze = generator.generate(height, width);
         StringBuilder mazeString = renderer.render(maze);
         mainInterface.showMaze(mazeString);
@@ -166,7 +165,7 @@ public class StartService {
     }
 
     public int selectRandomSize(int min, int max) {
-        int[] range = IntStream.iterate(min, n -> n + 2).limit(max / 2).toArray();
+        int[] range = IntStream.rangeClosed(min, max).filter(n -> n % 2 != 0).toArray();
         return range[random.nextInt(range.length)];
     }
 
