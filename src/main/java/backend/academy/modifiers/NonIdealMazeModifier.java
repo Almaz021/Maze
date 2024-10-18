@@ -5,6 +5,8 @@ import backend.academy.entities.Coordinate;
 import backend.academy.entities.Maze;
 import backend.academy.enums.Type;
 import backend.academy.interfaces.Modifier;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +18,7 @@ public class NonIdealMazeModifier implements Modifier {
     private static final int NORMAL_WEIGHT = 60;
     private static final int OTHER_WEIGHT = 20;
     private static final int TOTAL_WEIGHT = 100;
-    private static final double WALL_DELETION_FACTOR = 0.05;
+    private static final BigDecimal WALL_DELETION_FACTOR = new BigDecimal("0.05");
     private final Cell[][] grid;
     private final SecureRandom random;
 
@@ -38,7 +40,9 @@ public class NonIdealMazeModifier implements Modifier {
         }
         Collections.shuffle(wallCoordinates, random);
 
-        int wallsToDelete = (int) Math.ceil(wallCoordinates.size() * WALL_DELETION_FACTOR);
+        BigDecimal size = new BigDecimal(wallCoordinates.size());
+        int wallsToDelete = size.multiply(WALL_DELETION_FACTOR).setScale(0, RoundingMode.CEILING).intValue();
+
         for (int i = 0; i < wallsToDelete && i < wallCoordinates.size(); i++) {
             Coordinate coordinate = wallCoordinates.get(i);
             grid[coordinate.row()][coordinate.col()] = new Cell(coordinate, getRandomCellType());
