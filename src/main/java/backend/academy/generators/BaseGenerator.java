@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BaseGenerator {
+    private static final int NORMAL_WEIGHT = 60;
+    private static final int OTHER_WEIGHT = 20;
+    private static final int TOTAL_WEIGHT = 100;
+
     protected int xWall;
     protected int yWall;
     protected int xPassage;
@@ -20,25 +24,45 @@ public class BaseGenerator {
 
     public void fill(int height, int width) {
         grid = new Cell[height][width];
-        for (int y = 0; y < grid.length; y++) {
-            for (int x = 0; x < grid[y].length; x++) {
-                if (x % 2 != 0 && y % 2 != 0) {
-                    grid[y][x] = new Cell(new Coordinate(y, x), Type.DEFAULT);
-                } else if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    grid[y][x] = new Cell(new Coordinate(y, x), Type.BEDROCK);
-                } else {
-                    grid[y][x] = new Cell(new Coordinate(y, x), Type.WALL);
-                }
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                initializeCell(x, y, height, width);
             }
         }
     }
 
+    public void initializeCell(int x, int y, int height, int width) {
+        Coordinate coordinate = new Coordinate(y, x);
+
+        if (isPassage(x, y)) {
+            grid[y][x] = new Cell(coordinate, Type.DEFAULT);
+        } else if (isBoundary(x, y, height, width)) {
+            grid[y][x] = new Cell(coordinate, Type.BEDROCK);
+        } else {
+            grid[y][x] = new Cell(coordinate, Type.WALL);
+        }
+    }
+
+    public boolean isPassage(int x, int y) {
+        return x % 2 != 0 && y % 2 != 0;
+    }
+
+    public boolean isBoundary(int x, int y, int height, int width) {
+        return x == 0 || y == 0 || x == width - 1 || y == height - 1;
+    }
+
     public Cell selectStartPoint(int height, int width) {
-        int[] rangeHeight = IntStream.iterate(1, n -> n + 2).limit(height / 2).toArray();
-        int[] rangeWidth = IntStream.iterate(1, n -> n + 2).limit(width / 2).toArray();
-        int h = rangeHeight[random.nextInt(rangeHeight.length)];
-        int w = rangeWidth[random.nextInt(rangeWidth.length)];
+        int h = getRandomOdd(height - 2);
+        int w = getRandomOdd(width - 2);
         return grid[h][w];
+    }
+
+    public void setCell(Cell cell) {
+        grid[cell.coordinate().row()][cell.coordinate().col()] = cell;
+    }
+
+    public Cell createRandomCell(int row, int col) {
+        return new Cell(new Coordinate(row, col), getRandomCellType());
     }
 
     public boolean checkPath(Cell point, Direction direction) {
@@ -47,52 +71,41 @@ public class BaseGenerator {
     }
 
     public void calculateWallAndPassage(Cell point, Direction direction) {
-        xWall = calculateWallX(point.coordinate().col(), direction);
-        yWall = calculateWallY(point.coordinate().row(), direction);
-        xPassage = calculatePassageX(point.coordinate().col(), direction);
-        yPassage = calculatePassageY(point.coordinate().row(), direction);
+        xWall = calculateCoordinateX(point.coordinate().col(), direction, 1);
+        yWall = calculateCoordinateY(point.coordinate().row(), direction, 1);
+        xPassage = calculateCoordinateX(point.coordinate().col(), direction, 2);
+        yPassage = calculateCoordinateY(point.coordinate().row(), direction, 2);
     }
 
-    public int calculateWallX(int col, Direction direction) {
+    public int calculateCoordinateX(int value, Direction direction, int offset) {
         return switch (direction) {
-            case RIGHT -> col + 1;
-            case LEFT -> col - 1;
-            default -> col;
+            case LEFT -> value - offset;
+            case RIGHT -> value + offset;
+            default -> value;
         };
     }
 
-    public int calculateWallY(int row, Direction direction) {
+    public int calculateCoordinateY(int value, Direction direction, int offset) {
         return switch (direction) {
-            case UP -> row - 1;
-            case DOWN -> row + 1;
-            default -> row;
-        };
-    }
-
-    public int calculatePassageX(int col, Direction direction) {
-        return switch (direction) {
-            case RIGHT -> col + 2;
-            case LEFT -> col - 2;
-            default -> col;
-        };
-    }
-
-    public int calculatePassageY(int row, Direction direction) {
-        return switch (direction) {
-            case UP -> row - 2;
-            case DOWN -> row + 2;
-            default -> row;
+            case UP -> value - offset;
+            case DOWN -> value + offset;
+            default -> value;
         };
     }
 
     public Type getRandomCellType() {
-        Type[] types = new Type[] {
-            Type.NORMAL,
-            Type.NORMAL,
-            Type.NORMAL,
-            Type.ICE,
-            Type.SAND
-        };
-        return types[random.nextInt(types.length)];
+        int randomNum = random.nextInt(TOTAL_WEIGHT);
+        if (randomNum < NORMAL_WEIGHT) {
+            return Type.NORMAL;
+        } else if (randomNum < NORMAL_WEIGHT + OTHER_WEIGHT) {
+            return Type.ICE;
+        } else {
+            return Type.SAND;
+        }
+    }
+
+    public int getRandomOdd(int max) {
+        int[] number = IntStream.rangeClosed(1, max).filter(n -> n % 2 != 0).toArray();
+        return number[random.nextInt(number.length)];
     }
 }
