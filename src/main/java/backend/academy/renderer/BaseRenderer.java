@@ -49,7 +49,7 @@ public class BaseRenderer implements Renderer {
     }
 
     public void renderCell(StringBuilder result, Cell cell, boolean isOnPath) {
-        String color = getColor(cell, isOnPath).colorCode();
+        String color = getColor(cell.type(), isOnPath).colorCode();
         result.append(color).append(RECTANGLE).append(RECTANGLE).append(RESET);
     }
 
@@ -58,8 +58,8 @@ public class BaseRenderer implements Renderer {
         result.append(color).append(RECTANGLE).append(RECTANGLE).append(RESET);
     }
 
-    public Color getColor(Cell cell, boolean isOnPath) {
-        return switch (cell.type()) {
+    public Color getColor(Type type, boolean isOnPath) {
+        return switch (type) {
             case BEDROCK -> PURPLE;
             case NORMAL -> isOnPath ? RED : BLACK;
             case ICE -> isOnPath ? RED : CYAN;
