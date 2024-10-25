@@ -28,9 +28,6 @@ public class StartService {
     private Maze maze;
 
     public void start() throws IOException {
-        Generator generator;
-        Solver solver;
-        Modifier modifier;
         mainInterface.helloMessage();
 
         mainInterface.chooseWidth();
@@ -45,12 +42,12 @@ public class StartService {
 
         mainInterface.chooseGenerator();
         String g = getInput();
-        generator = selectGenerator(g);
+        Generator generator = selectGenerator(g);
         mainInterface.chosenGenerator(generator);
 
         mainInterface.chooseSolver();
         String s = getInput();
-        solver = selectSolver(s);
+        Solver solver = selectSolver(s);
         mainInterface.chosenSolver(solver);
 
         mainInterface.generateMaze();
@@ -64,7 +61,7 @@ public class StartService {
         if ("YES".equalsIgnoreCase(answer)) {
             mainInterface.chooseModifier();
             String m = getInput();
-            modifier = selectModifier(m);
+            Modifier modifier = selectModifier(m);
             mainInterface.chosenModifier(modifier);
 
             mainInterface.modifyMaze();
