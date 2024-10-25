@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PrimGenerator extends BaseGenerator implements Generator {
     public PrimGenerator(SecureRandom random) {
@@ -24,8 +25,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
     }
 
     public void start(Cell startPoint) {
-        ArrayList<Cell> cells = new ArrayList<>();
-        ArrayList<Cell> passages = new ArrayList<>();
+        List<Cell> cells = new ArrayList<>();
+        List<Cell> passages = new ArrayList<>();
 
         Cell selectedCell = createRandomCell(startPoint.coordinate().row(), startPoint.coordinate().col());
         setCell(selectedCell);
@@ -59,7 +60,7 @@ public class PrimGenerator extends BaseGenerator implements Generator {
 
     }
 
-    public void collectCells(ArrayList<Cell> cells, Cell selectedCell) {
+    public void collectCells(List<Cell> cells, Cell selectedCell) {
         for (Direction direction : Direction.values()) {
             if (checkPath(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
                 int xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
@@ -71,7 +72,7 @@ public class PrimGenerator extends BaseGenerator implements Generator {
         }
     }
 
-    public void collectPassages(ArrayList<Cell> passages, Cell selectedCell) {
+    public void collectPassages(List<Cell> passages, Cell selectedCell) {
         for (Direction direction : Direction.values()) {
             if (checkIsPassage(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
 
