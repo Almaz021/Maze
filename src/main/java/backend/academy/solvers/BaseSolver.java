@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class BaseSolver {
+    private static final List<Type> PASSABLE_TYPES = List.of(Type.NORMAL, Type.ICE, Type.SAND);
     protected List<Coordinate> list;
     protected List<Coordinate> visited;
     protected List<Coordinate> restricted;
@@ -69,7 +70,7 @@ public class BaseSolver {
     public boolean checkDirection(Coordinate point, Direction direction) {
         Cell cell = grid[calculateRow(point, direction)][calculateCol(point, direction)];
         return
-            List.of(Type.NORMAL, Type.ICE, Type.SAND).contains(cell.type()) && (!visited.contains(cell.coordinate())
+            PASSABLE_TYPES.contains(cell.type()) && (!visited.contains(cell.coordinate())
                 || tempGrid[cell.coordinate().row()][cell.coordinate().col()] > tempGrid[point.row()][point.col()]
                 + grid[cell.coordinate().row()][cell.coordinate().col()].type().type());
     }
