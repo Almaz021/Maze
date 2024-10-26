@@ -48,8 +48,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
             BigDecimal passageRow = new BigDecimal(passage.coordinate().row());
             BigDecimal divisor = new BigDecimal("2");
 
-            int xWall = (selectedCellCol.add(passageCol)).divide(divisor, RoundingMode.FLOOR).intValue();
-            int yWall = (selectedCellRow.add(passageRow)).divide(divisor, RoundingMode.FLOOR).intValue();
+            xWall = (selectedCellCol.add(passageCol)).divide(divisor, RoundingMode.FLOOR).intValue();
+            yWall = (selectedCellRow.add(passageRow)).divide(divisor, RoundingMode.FLOOR).intValue();
 
             setCell(createRandomCell(yWall, xWall));
 
@@ -63,8 +63,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
     public void collectCells(List<Cell> cells, Cell selectedCell) {
         for (Direction direction : Direction.values()) {
             if (checkPath(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
-                int xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
-                int yPassage = calculateCoordinateY(selectedCell.coordinate().row(), direction, 2);
+                xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
+                yPassage = calculateCoordinateY(selectedCell.coordinate().row(), direction, 2);
                 if (!cells.contains(grid[yPassage][xPassage])) {
                     cells.add(grid[yPassage][xPassage]);
                 }
@@ -76,8 +76,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
         for (Direction direction : Direction.values()) {
             if (checkIsPassage(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
 
-                int xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
-                int yPassage = calculateCoordinateY(selectedCell.coordinate().row(), direction, 2);
+                xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
+                yPassage = calculateCoordinateY(selectedCell.coordinate().row(), direction, 2);
                 passages.add(grid[yPassage][xPassage]);
             }
         }
