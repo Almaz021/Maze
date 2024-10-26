@@ -105,7 +105,6 @@ public class BaseGenerator {
     }
 
     public int getRandomOdd(int max) {
-        int[] number = IntStream.rangeClosed(1, max).filter(n -> n % 2 != 0).toArray();
-        return number[random.nextInt(number.length)];
+        return random.nextInt((max + 1) / 2) * 2 + 1;
     }
 }
