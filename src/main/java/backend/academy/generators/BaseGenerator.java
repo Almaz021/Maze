@@ -5,7 +5,6 @@ import backend.academy.entities.Coordinate;
 import backend.academy.enums.Direction;
 import backend.academy.enums.Type;
 import java.security.SecureRandom;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
