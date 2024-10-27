@@ -35,8 +35,8 @@ public class BFSSolver extends BaseSolver implements Solver {
 
             for (Direction direction : Direction.values()) {
                 if (checkDirection(current, direction)) {
-                    int row = calculateRow(current, direction);
-                    int col = calculateCol(current, direction);
+                    int row = calculateCoordinate(current, direction, true);
+                    int col = calculateCoordinate(current, direction, false);
 
                     Coordinate newPoint = new Coordinate(row, col);
 

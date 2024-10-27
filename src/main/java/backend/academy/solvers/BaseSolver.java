@@ -58,8 +58,8 @@ public class BaseSolver {
     public Coordinate selectMin(Coordinate point) {
         Cell cell = grid[point.row()][point.col()];
         for (Direction direction : Direction.values()) {
-            int row = calculateRow(point, direction);
-            int col = calculateCol(point, direction);
+            int row = calculateCoordinate(point, direction, true);
+            int col = calculateCoordinate(point, direction, false);
             if (bigCheck(row, col, cell)) {
                 cell = grid[row][col];
             }
@@ -68,7 +68,7 @@ public class BaseSolver {
     }
 
     public boolean checkDirection(Coordinate point, Direction direction) {
-        Cell cell = grid[calculateRow(point, direction)][calculateCol(point, direction)];
+        Cell cell = grid[calculateCoordinate(point, direction, true)][calculateCoordinate(point, direction, false)];
         return
             PASSABLE_TYPES.contains(cell.type()) && (!visited.contains(cell.coordinate())
                 || tempGrid[cell.coordinate().row()][cell.coordinate().col()] > tempGrid[point.row()][point.col()]
@@ -85,19 +85,12 @@ public class BaseSolver {
         return 0 <= row && row < Settings.MAX_HEIGHT && 0 <= col && col < Settings.MAX_WIDTH;
     }
 
-    public int calculateRow(Coordinate point, Direction direction) {
+    public int calculateCoordinate(Coordinate point, Direction direction, boolean isRow) {
         return switch (direction) {
-            case UP -> point.row() - 1;
-            case DOWN -> point.row() + 1;
-            default -> point.row();
-        };
-    }
-
-    public int calculateCol(Coordinate point, Direction direction) {
-        return switch (direction) {
-            case LEFT -> point.col() - 1;
-            case RIGHT -> point.col() + 1;
-            default -> point.col();
+            case UP -> isRow ? point.row() - 1 : point.col();
+            case DOWN -> isRow ? point.row() + 1 : point.col();
+            case LEFT -> isRow ? point.row() : point.col() - 1;
+            case RIGHT -> isRow ? point.row() : point.col() + 1;
         };
     }
 

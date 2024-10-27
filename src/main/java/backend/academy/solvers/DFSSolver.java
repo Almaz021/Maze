@@ -22,8 +22,8 @@ public class DFSSolver extends BaseSolver implements Solver {
 
         for (Direction direction : Direction.values()) {
             if (checkDirection(point, direction)) {
-                int row = calculateRow(point, direction);
-                int col = calculateCol(point, direction);
+                int row = calculateCoordinate(point, direction, true);
+                int col = calculateCoordinate(point, direction, false);
 
                 Coordinate newPoint = new Coordinate(row, col);
 
