@@ -6,6 +6,12 @@ import backend.academy.modifiers.NonIdealMazeModifier;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Factory class for creating maze modifiers.
+ * <p>
+ * This class provides methods to select and instantiate different maze modifiers
+ * based on user input or randomly choose one from the available options.
+ */
 @RequiredArgsConstructor
 public class ModifierFactory {
     private final Maze maze;
@@ -14,7 +20,7 @@ public class ModifierFactory {
     public Modifier selectModifier(String modifier) {
         return switch (modifier) {
             case "1" -> createNonIdealMazeModifier();
-            default -> randomModifier();
+            default -> getRandomModifier();
         };
     }
 
@@ -22,7 +28,7 @@ public class ModifierFactory {
         return new NonIdealMazeModifier(maze.grid(), random);
     }
 
-    private Modifier randomModifier() {
+    private Modifier getRandomModifier() {
         Modifier[] modifiers = {
             createNonIdealMazeModifier()
         };

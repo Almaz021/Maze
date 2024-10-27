@@ -10,6 +10,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import lombok.experimental.UtilityClass;
 
+/**
+ * The entry point of the application that initializes and starts the maze-solving process.
+ */
 @UtilityClass
 public class Main {
     public static void main(String[] args) {

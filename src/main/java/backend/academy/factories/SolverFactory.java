@@ -6,6 +6,12 @@ import backend.academy.solvers.DFSSolver;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Factory class for creating maze solvers.
+ * <p>
+ * This class provides methods to select and instantiate different maze solvers
+ * based on user input or randomly choose one from the available options.
+ */
 @RequiredArgsConstructor
 public class SolverFactory {
 
@@ -15,7 +21,7 @@ public class SolverFactory {
         return switch (solver) {
             case "1" -> createBFSSolver();
             case "2" -> createDFSSolver();
-            default -> randomSolver();
+            default -> getRandomSolver();
         };
     }
 
@@ -27,7 +33,7 @@ public class SolverFactory {
         return new DFSSolver();
     }
 
-    public Solver randomSolver() {
+    private Solver getRandomSolver() {
         Solver[] solvers = {
             createBFSSolver(),
             createDFSSolver()

@@ -9,6 +9,11 @@ import backend.academy.interfaces.Generator;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Base class for generating mazes.
+ * This class provides fundamental methods for maze generation,
+ * including grid initialization, cell setting, and random cell type generation.
+ */
 @RequiredArgsConstructor
 public class BaseGenerator implements Generator {
     private static final int NORMAL_WEIGHT = 60;
@@ -24,6 +29,13 @@ public class BaseGenerator implements Generator {
     protected Cell[][] grid;
     protected final SecureRandom random;
 
+    /**
+     * Generates a maze with the specified height and width.
+     *
+     * @param height The height of the maze.
+     * @param width  The width of the maze.
+     * @return The generated Maze object.
+     */
     @Override
     public Maze generate(int height, int width) {
         fill(height, width);
@@ -32,6 +44,12 @@ public class BaseGenerator implements Generator {
         return new Maze(height, width, grid);
     }
 
+    /**
+     * Fills the grid with cells based on the specified height and width.
+     *
+     * @param height The height of the maze.
+     * @param width  The width of the maze.
+     */
     @Override
     public void fill(int height, int width) {
         grid = new Cell[height][width];
@@ -42,7 +60,25 @@ public class BaseGenerator implements Generator {
         }
     }
 
-    public void initializeCell(int x, int y, int height, int width) {
+    /**
+     * Initializes the cell at the specified coordinates.
+     * <p>
+     * This method sets the cell in the maze grid based on its position:
+     * <ul>
+     *     <li>If the cell is on the boundary, it is set to {@link Type#BEDROCK}.</li>
+     *     <li>If the cell is a passage (odd coordinates), it is set to {@link Type#DEFAULT}.</li>
+     *     <li>All other cells are set to {@link Type#WALL}.</li>
+     * </ul>
+     * The method ensures that the borders of the maze are always filled with BEDROCK,
+     * while the interior cells alternate between DEFAULT and WALL types based on their position.
+     * </p>
+     *
+     * @param x      The x-coordinate of the cell.
+     * @param y      The y-coordinate of the cell.
+     * @param height The total height of the maze.
+     * @param width  The total width of the maze.
+     */
+    private void initializeCell(int x, int y, int height, int width) {
         Coordinate coordinate = new Coordinate(y, x);
 
         if (isPassage(x, y)) {
@@ -53,12 +89,28 @@ public class BaseGenerator implements Generator {
             grid[y][x] = new Cell(coordinate, Type.WALL);
         }
     }
+    /**
+     * Checks if the specified coordinates represent a passage.
+     *
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     * @return True if the coordinates represent a passage, false otherwise.
+     */
 
-    public boolean isPassage(int x, int y) {
+    private boolean isPassage(int x, int y) {
         return x % 2 != 0 && y % 2 != 0;
     }
+    /**
+     * Checks if the specified coordinates are on the boundary of the maze.
+     *
+     * @param x      The x-coordinate.
+     * @param y      The y-coordinate.
+     * @param height The height of the maze.
+     * @param width  The width of the maze.
+     * @return True if the coordinates are on the boundary, false otherwise.
+     */
 
-    public boolean isBoundary(int x, int y, int height, int width) {
+    private boolean isBoundary(int x, int y, int height, int width) {
         return x == 0 || y == 0 || x == width - 1 || y == height - 1;
     }
 
@@ -69,6 +121,16 @@ public class BaseGenerator implements Generator {
         return grid[h][w];
     }
 
+    /**
+     * Sets the specified cell in the maze grid.
+     * <p>
+     * This method updates the grid at the cell's coordinates with the provided cell instance.
+     * It is used to change the type of the cell at a specific location in the maze,
+     * allowing for modifications during maze generation or solving processes.
+     * </p>
+     *
+     * @param cell The cell to set, containing the new type and coordinates to be updated in the grid.
+     */
     @Override
     public void setCell(Cell cell) {
         grid[cell.coordinate().row()][cell.coordinate().col()] = cell;
@@ -78,12 +140,25 @@ public class BaseGenerator implements Generator {
         return new Cell(new Coordinate(row, col), getRandomCellType());
     }
 
+    /**
+     * Checks if there is a path from the specified cell in the given direction.
+     *
+     * @param point     The cell to check.
+     * @param direction The direction to check.
+     * @return True if there is a path, false otherwise.
+     */
     @Override
     public boolean checkPath(Cell point, Direction direction) {
         calculateWallAndPassage(point, direction);
         return grid[yWall][xWall].type() == Type.WALL && grid[yPassage][xPassage].type() == Type.DEFAULT;
     }
 
+    /**
+     * Calculates the wall and passage coordinates based on the given point and direction.
+     *
+     * @param point     The cell from which to calculate.
+     * @param direction The direction to calculate.
+     */
     public void calculateWallAndPassage(Cell point, Direction direction) {
         xWall = calculateCoordinateX(point.coordinate().col(), direction, 1);
         yWall = calculateCoordinateY(point.coordinate().row(), direction, 1);
@@ -107,7 +182,7 @@ public class BaseGenerator implements Generator {
         };
     }
 
-    public Type getRandomCellType() {
+    private Type getRandomCellType() {
         int randomNum = random.nextInt(TOTAL_WEIGHT);
         if (randomNum < NORMAL_WEIGHT) {
             return Type.NORMAL;
@@ -118,7 +193,7 @@ public class BaseGenerator implements Generator {
         }
     }
 
-    public int getRandomOdd(int max) {
+    private int getRandomOdd(int max) {
         return random.nextInt((max + 1) / 2) * 2 + 1;
     }
 }

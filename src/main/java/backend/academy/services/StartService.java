@@ -19,55 +19,69 @@ import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * StartService is responsible for orchestrating the maze generation,
+ * modification, and solving processes, interacting with the user through
+ * the MainInterface.
+ */
 @RequiredArgsConstructor
 public class StartService {
+    private static final List<Type> PASSABLE_TYPES = List.of(Type.NORMAL, Type.ICE, Type.SAND);
     private final BufferedReader reader;
     private final BaseRenderer renderer;
     private final SecureRandom random;
     private final MainInterface mainInterface;
     private Maze maze;
 
+    /**
+     * Starts the service, prompting the user for input and executing
+     * maze generation, modification, and solving as required.
+     *
+     * @throws IOException if an input/output error occurs
+     */
     public void start() throws IOException {
         mainInterface.helloMessage();
 
+        // getting size of the Maze
         int width = getMazeWidth();
-
         int height = getMazeHeight();
-
         mainInterface.chosenSize(height, width);
 
+        // getting Generator and Solver
         Generator generator = getMazeGenerator();
-
         Solver solver = getMazeSolver();
 
+        // generating Maze
         generateMaze(generator, height, width);
 
+        // request for modification and Maze modifying
         if (isModificationRequested()) {
             modifyMaze(height, width);
         }
 
+        // getting start and end points
         Coordinate firstPoint = getPointCoordinates(height, width);
         Coordinate secondPoint = getPointCoordinates(height, width);
 
+        // calculating and showing path
         calculateAndShowPath(solver, firstPoint, secondPoint);
-
         mainInterface.finish();
 
     }
 
-    public int getMazeWidth() throws IOException {
+    private int getMazeWidth() throws IOException {
         mainInterface.chooseWidth();
         String w = getInput();
         return checkSize(w, Settings.MIN_WIDTH, Settings.MAX_WIDTH);
     }
 
-    public int getMazeHeight() throws IOException {
+    private int getMazeHeight() throws IOException {
         mainInterface.chooseHeight();
         String h = getInput();
         return checkSize(h, Settings.MIN_HEIGHT, Settings.MAX_HEIGHT);
     }
 
-    public Generator getMazeGenerator() throws IOException {
+    private Generator getMazeGenerator() throws IOException {
         mainInterface.chooseGenerator();
         String g = getInput();
         Generator generator = selectGenerator(g);
@@ -75,7 +89,7 @@ public class StartService {
         return generator;
     }
 
-    public Solver getMazeSolver() throws IOException {
+    private Solver getMazeSolver() throws IOException {
         mainInterface.chooseSolver();
         String s = getInput();
         Solver solver = selectSolver(s);
@@ -83,31 +97,42 @@ public class StartService {
         return solver;
     }
 
-    public void generateMaze(Generator generator, int height, int width) {
+    private void generateMaze(Generator generator, int height, int width) {
         mainInterface.generateMaze();
         maze = generator.generate(height, width);
         StringBuilder mazeString = renderer.render(maze);
         mainInterface.showMaze(mazeString);
     }
 
-    public boolean isModificationRequested() throws IOException {
+    private boolean isModificationRequested() throws IOException {
         mainInterface.requestForModification();
         String answer = getInput();
         return "YES".equalsIgnoreCase(answer);
     }
 
-    public void modifyMaze(int height, int width) throws IOException {
+    private void modifyMaze(int height, int width) throws IOException {
         mainInterface.chooseModifier();
         String m = getInput();
         Modifier modifier = selectModifier(m);
+
         mainInterface.chosenModifier(modifier);
         mainInterface.modifyMaze();
+
         maze = modifier.modify(height, width);
         StringBuilder mazeString = renderer.render(maze);
+
         mainInterface.showMaze(mazeString);
     }
 
-    public Coordinate getPointCoordinates(int height, int width) throws IOException {
+    /**
+     * Prompts the user for coordinates of a point in the maze and returns the coordinates.
+     *
+     * @param height the height of the maze
+     * @param width the width of the maze
+     * @return the selected Coordinate
+     * @throws IOException if an input/output error occurs
+     */
+    private Coordinate getPointCoordinates(int height, int width) throws IOException {
         mainInterface.choosePoint();
         mainInterface.choosePointCoordinates();
         String coords;
@@ -121,7 +146,7 @@ public class StartService {
         return new Coordinate(firstPointY, firstPointX);
     }
 
-    public void calculateAndShowPath(Solver solver, Coordinate firstPoint, Coordinate secondPoint) {
+    private void calculateAndShowPath(Solver solver, Coordinate firstPoint, Coordinate secondPoint) {
         mainInterface.calculatePath();
         List<Coordinate> path;
         path = solver.solve(maze, firstPoint, secondPoint);
@@ -129,11 +154,26 @@ public class StartService {
         mainInterface.showMaze(mazeString);
     }
 
-    public String getInput() throws IOException {
+    /**
+     * Reads a line of input from the user.
+     *
+     * @return the user input as a String
+     * @throws IOException if an input/output error occurs
+     */
+    private String getInput() throws IOException {
         String input = reader.readLine();
         return input == null ? "" : input;
     }
 
+    /**
+     * Validates the size input by the user, ensuring it is within the specified range
+     * and is an odd number. If not valid, it selects a random size.
+     *
+     * @param size the input size as a String
+     * @param min the minimum acceptable size
+     * @param max the maximum acceptable size
+     * @return the validated size
+     */
     public int checkSize(String size, int min, int max) {
         try {
             int s = Integer.parseInt(size);
@@ -149,6 +189,15 @@ public class StartService {
         }
     }
 
+    /**
+     * Validates the coordinates input by the user, checking if they are within bounds
+     * and correspond to a passable cell in the maze.
+     *
+     * @param coordinates the input coordinates as a String
+     * @param height the height of the maze
+     * @param width the width of the maze
+     * @return true if the coordinates are invalid, false otherwise
+     */
     public boolean checkCoordinates(String coordinates, int height, int width) {
         try {
             String[] parts = coordinates.split(" ");
@@ -162,7 +211,7 @@ public class StartService {
             boolean inBounds = (0 <= x && x < width && 0 <= y && y < height);
 
             if (inBounds) {
-                if (checkPassage(y, x)) {
+                if (checkIsPassage(y, x)) {
                     return false;
                 } else {
                     mainInterface.wrongPoint();
@@ -178,24 +227,24 @@ public class StartService {
         }
     }
 
-    public boolean checkPassage(int y, int x) {
-        return List.of(Type.NORMAL, Type.ICE, Type.SAND).contains(maze.grid()[y][x].type());
+    private boolean checkIsPassage(int y, int x) {
+        return PASSABLE_TYPES.contains(maze.grid()[y][x].type());
     }
 
-    public int selectRandomSize(int min, int max) {
+    private int selectRandomSize(int min, int max) {
         int[] range = IntStream.rangeClosed(min, max).filter(n -> n % 2 != 0).toArray();
         return range[random.nextInt(range.length)];
     }
 
-    public Generator selectGenerator(String generator) {
+    private Generator selectGenerator(String generator) {
         return new GeneratorFactory(random).selectGenerator(generator);
     }
 
-    public Solver selectSolver(String solver) {
+    private Solver selectSolver(String solver) {
         return new SolverFactory(random).selectSolver(solver);
     }
 
-    public Modifier selectModifier(String modifier) {
+    private Modifier selectModifier(String modifier) {
         return new ModifierFactory(maze, random).selectModifier(modifier);
     }
 }

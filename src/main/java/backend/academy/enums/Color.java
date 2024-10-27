@@ -2,6 +2,14 @@ package backend.academy.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+/**
+ * Enum representing various colors for console output.
+ * <p>
+ * Each color is associated with an ANSI escape code that can be used to
+ * change the text color in terminal or console applications. This enum
+ * can be used to enhance the visual representation of text output
+ * by applying different colors.
+ */
 
 @RequiredArgsConstructor
 @Getter
@@ -14,7 +22,7 @@ public enum Color {
     PURPLE("\u001B[38;2;195;161;255m"),
     YELLOW("\u001B[38;2;255;248;163m"),
     ORANGE("\u001B[38;2;255;111;5m"),
-    RESET("\u001B[0m");
+    RESET("\u001B[0m");  // Reset to default color
 
     private final String colorCode;
 

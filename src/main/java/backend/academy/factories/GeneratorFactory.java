@@ -6,6 +6,12 @@ import backend.academy.interfaces.Generator;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Factory class for creating maze generator instances.
+ * <p>
+ * This class provides methods to select and instantiate different maze generator algorithms
+ * based on user input or randomly choose one from the available options.
+ */
 @RequiredArgsConstructor
 public class GeneratorFactory {
 
@@ -15,7 +21,7 @@ public class GeneratorFactory {
         return switch (generator) {
             case "1" -> createRecursiveBacktrackingGenerator();
             case "2" -> createPrimGenerator();
-            default -> randomGenerator();
+            default -> getRandomGenerator();
         };
     }
 
@@ -27,7 +33,7 @@ public class GeneratorFactory {
         return new PrimGenerator(random);
     }
 
-    public Generator randomGenerator() {
+    private Generator getRandomGenerator() {
         Generator[] generators = {
             createRecursiveBacktrackingGenerator(),
             createPrimGenerator()

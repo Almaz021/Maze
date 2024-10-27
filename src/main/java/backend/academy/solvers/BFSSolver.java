@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+/**
+ * Implements a breadth-first search (BFS) algorithm to fill the distance in the maze
+ * from the starting coordinate of all other points.
+ */
 public class BFSSolver extends BaseSolver implements Solver {
     private Queue<Coordinate> queue;
 
@@ -26,7 +30,12 @@ public class BFSSolver extends BaseSolver implements Solver {
         queue = new PriorityQueue<>(Comparator.comparingInt(n -> grid[n.row()][n.col()].type().type()));
     }
 
-    public void bfs(Coordinate point) {
+    /**
+     * Executes the BFS algorithm starting from the given point.
+     *
+     * @param point the starting coordinate for BFS
+     */
+    private void bfs(Coordinate point) {
         queue.add(point);
         visited.add(point);
 
@@ -34,7 +43,7 @@ public class BFSSolver extends BaseSolver implements Solver {
             Coordinate current = queue.poll();
 
             for (Direction direction : Direction.values()) {
-                if (checkDirection(current, direction)) {
+                if (checkCellDirection(current, direction)) {
                     int row = calculateCoordinate(current, direction, true);
                     int col = calculateCoordinate(current, direction, false);
 

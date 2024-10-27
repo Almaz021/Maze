@@ -6,6 +6,10 @@ import backend.academy.enums.Direction;
 import backend.academy.interfaces.Solver;
 import java.util.List;
 
+/**
+ * Implements a depth-first search (DFS) algorithm to traverse the maze
+ * and calculate the distance from the starting coordinate to all other points.
+ */
 public class DFSSolver extends BaseSolver implements Solver {
 
     public List<Coordinate> solve(Maze maze, Coordinate start, Coordinate end) {
@@ -17,11 +21,16 @@ public class DFSSolver extends BaseSolver implements Solver {
         return list;
     }
 
-    public void dfs(Coordinate point) {
+    /**
+     * Executes the DFS algorithm from the given point.
+     *
+     * @param point the coordinate from which to perform DFS
+     */
+    private void dfs(Coordinate point) {
         visited.add(point);
 
         for (Direction direction : Direction.values()) {
-            if (checkDirection(point, direction)) {
+            if (checkCellDirection(point, direction)) {
                 int row = calculateCoordinate(point, direction, true);
                 int col = calculateCoordinate(point, direction, false);
 

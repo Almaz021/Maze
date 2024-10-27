@@ -8,6 +8,10 @@ import java.io.PrintWriter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * MainInterface handles user interaction by displaying messages and prompts
+ * related to maze generation, solving, and modification.
+ */
 @RequiredArgsConstructor
 public class MainInterface {
     @Getter private String currMessage;
