@@ -99,3 +99,34 @@ This algorithm modifies the generated maze to increase its difficulty:
 2. 5% of the walls (rounded up) are randomly selected and replaced with passages.
 
 This makes the maze less ideal, adding extra paths and complications to solve.
+
+---
+
+## Description of maze colors
+
+#### Each cell in the maze can have its own color for visual highlighting:
+
+- **BLACK** — _black, denotes a regular maze passage._
+- **CYAN** — _blue, denotes an ice passage._
+- **YELLOW** — _yellow, denotes a sand passage._
+- **WHITE** — _white, denotes the walls of the maze._
+- **GREEN** — _green, the starting point of the path._
+- **ORANGE** — _orange, the end point of the path._
+- **RED** — _red, the path found by the algorithm (the final shortest path)._
+- **PURPLE** — _purple, denotes the boundaries of the maze._
+- **RESET** — _reset color, returns the console color to the default._
+
+---
+
+## Description of maze cell types
+
+#### Each cell has a weight that indicates the difficulty of passing or the cell characteristic:
+
+- **DEFAULT (-1)** — _default value for undefined cells._
+- **NORMAL (1)** — _normal cell-passage._
+- **SAND (5)** — _cell-passage with slowdown (sand)._
+- **ICE (0)** — _cell-passage without friction (ice)._
+- **WALL (100)** — _wall, impassable._
+- **BEDROCK (1000)** — _border of the maze (permanent impassable obstacle)._
+- **START (Integer.MIN_VALUE)** — _starting point._
+- **END (Integer.MAX_VALUE)** — _end point._
