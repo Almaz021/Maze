@@ -16,18 +16,16 @@ public class PrimGenerator extends BaseGenerator implements Generator {
 
     @Override
     public Maze generate(int height, int width) {
-        fill(height, width);
-        Cell startPoint = selectStartPoint(height, width);
-        start(startPoint);
+        super.generate(height, width);
+        start();
         return new Maze(height, width, grid);
     }
 
-    public void start(Cell startPoint) {
+    public void start() {
         List<Cell> cells = new ArrayList<>();
         List<Cell> passages = new ArrayList<>();
 
-        Cell selectedCell = createRandomCell(startPoint.coordinate().row(), startPoint.coordinate().col());
-        setCell(selectedCell);
+        Cell selectedCell = startPoint;
 
         do {
             collectCells(cells, selectedCell);

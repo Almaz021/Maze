@@ -2,13 +2,15 @@ package backend.academy.generators;
 
 import backend.academy.entities.Cell;
 import backend.academy.entities.Coordinate;
+import backend.academy.entities.Maze;
 import backend.academy.enums.Direction;
 import backend.academy.enums.Type;
+import backend.academy.interfaces.Generator;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class BaseGenerator {
+public class BaseGenerator implements Generator {
     private static final int NORMAL_WEIGHT = 60;
     private static final int OTHER_WEIGHT = 20;
     private static final int TOTAL_WEIGHT = 100;
@@ -18,9 +20,19 @@ public class BaseGenerator {
     protected int xPassage;
     protected int yPassage;
 
+    protected Cell startPoint;
     protected Cell[][] grid;
     protected final SecureRandom random;
 
+    @Override
+    public Maze generate(int height, int width) {
+        fill(height, width);
+        startPoint = selectStartPoint(height, width);
+        setCell(createRandomCell(startPoint.coordinate().row(), startPoint.coordinate().col()));
+        return new Maze(height, width, grid);
+    }
+
+    @Override
     public void fill(int height, int width) {
         grid = new Cell[height][width];
         for (int y = 0; y < height; y++) {
@@ -50,12 +62,14 @@ public class BaseGenerator {
         return x == 0 || y == 0 || x == width - 1 || y == height - 1;
     }
 
+    @Override
     public Cell selectStartPoint(int height, int width) {
         int h = getRandomOdd(height - 2);
         int w = getRandomOdd(width - 2);
         return grid[h][w];
     }
 
+    @Override
     public void setCell(Cell cell) {
         grid[cell.coordinate().row()][cell.coordinate().col()] = cell;
     }
@@ -64,6 +78,7 @@ public class BaseGenerator {
         return new Cell(new Coordinate(row, col), getRandomCellType());
     }
 
+    @Override
     public boolean checkPath(Cell point, Direction direction) {
         calculateWallAndPassage(point, direction);
         return grid[yWall][xWall].type() == Type.WALL && grid[yPassage][xPassage].type() == Type.DEFAULT;

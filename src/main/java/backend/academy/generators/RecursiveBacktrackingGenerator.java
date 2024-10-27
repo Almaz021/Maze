@@ -18,16 +18,14 @@ public class RecursiveBacktrackingGenerator extends BaseGenerator implements Gen
 
     @Override
     public Maze generate(int height, int width) {
-        fill(height, width);
-        Cell startPoint = selectStartPoint(height, width);
-        start(startPoint);
+        super.generate(height, width);
+        start();
         return new Maze(height, width, grid);
     }
 
-    public void start(Cell startPoint) {
+    public void start() {
         Deque<Cell> cells = new ArrayDeque<>();
 
-        setCell(createRandomCell(startPoint.coordinate().row(), startPoint.coordinate().col()));
         cells.push(grid[startPoint.coordinate().row()][startPoint.coordinate().col()]);
 
         while (!cells.isEmpty()) {
