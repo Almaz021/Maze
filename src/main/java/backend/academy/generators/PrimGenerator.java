@@ -5,8 +5,6 @@ import backend.academy.entities.Maze;
 import backend.academy.enums.Direction;
 import backend.academy.enums.Type;
 import backend.academy.interfaces.Generator;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,14 +40,8 @@ public class PrimGenerator extends BaseGenerator implements Generator {
             Cell passage = passages.get(random.nextInt(passages.size()));
             passages.clear();
 
-            BigDecimal selectedCellCol = new BigDecimal(selectedCell.coordinate().col());
-            BigDecimal selectedCellRow = new BigDecimal(selectedCell.coordinate().row());
-            BigDecimal passageCol = new BigDecimal(passage.coordinate().col());
-            BigDecimal passageRow = new BigDecimal(passage.coordinate().row());
-            BigDecimal divisor = new BigDecimal("2");
-
-            xWall = (selectedCellCol.add(passageCol)).divide(divisor, RoundingMode.FLOOR).intValue();
-            yWall = (selectedCellRow.add(passageRow)).divide(divisor, RoundingMode.FLOOR).intValue();
+            xWall = (int) ((long) selectedCell.coordinate().col() + passage.coordinate().col()) / 2;
+            yWall = (int) ((long) selectedCell.coordinate().row() + passage.coordinate().row()) / 2;
 
             setCell(createRandomCell(yWall, xWall));
 
