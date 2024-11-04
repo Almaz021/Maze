@@ -4,6 +4,7 @@ import backend.academy.entities.Maze;
 import backend.academy.interfaces.Modifier;
 import backend.academy.modifiers.NonIdealMazeModifier;
 import java.security.SecureRandom;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -28,7 +29,7 @@ public class ModifierFactory {
     }
 
     private Modifier createNonIdealMazeModifier() {
-        return new NonIdealMazeModifier(maze.grid(), random);
+        return new NonIdealMazeModifier(Objects.requireNonNull(maze).grid(), random);
     }
 
     private Modifier getRandomModifier() {
