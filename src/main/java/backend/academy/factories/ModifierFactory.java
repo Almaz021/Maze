@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class ModifierFactory {
+    private final Modifier nonIdealMazeModifier = createNonIdealMazeModifier();
+    private final Modifier[] modifiers = {nonIdealMazeModifier};
+
     private final Maze maze;
     private final SecureRandom random;
 
@@ -29,9 +32,6 @@ public class ModifierFactory {
     }
 
     private Modifier getRandomModifier() {
-        Modifier[] modifiers = {
-            createNonIdealMazeModifier()
-        };
         return modifiers[random.nextInt(modifiers.length)];
     }
 }

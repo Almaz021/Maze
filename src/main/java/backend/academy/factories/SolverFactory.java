@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class SolverFactory {
+    private final Solver bfsSolver = createBFSSolver();
+    private final Solver dfsSolver = createDFSSolver();
+    private final Solver[] solvers = {bfsSolver, dfsSolver};
 
     private final SecureRandom random;
 
@@ -34,10 +37,6 @@ public class SolverFactory {
     }
 
     private Solver getRandomSolver() {
-        Solver[] solvers = {
-            createBFSSolver(),
-            createDFSSolver()
-        };
         return solvers[random.nextInt(solvers.length)];
     }
 }

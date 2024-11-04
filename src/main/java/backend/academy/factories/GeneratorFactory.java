@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class GeneratorFactory {
+    private final Generator recursiveBacktrackingGenerator = createRecursiveBacktrackingGenerator();
+    private final Generator primGenerator = createPrimGenerator();
+    private final Generator[] generators = {recursiveBacktrackingGenerator, primGenerator};
 
     private final SecureRandom random;
 
@@ -34,10 +37,6 @@ public class GeneratorFactory {
     }
 
     private Generator getRandomGenerator() {
-        Generator[] generators = {
-            createRecursiveBacktrackingGenerator(),
-            createPrimGenerator()
-        };
         return generators[random.nextInt(generators.length)];
     }
 }
