@@ -89,6 +89,7 @@ public class BaseGenerator implements Generator {
             grid[y][x] = new Cell(coordinate, Type.WALL);
         }
     }
+
     /**
      * Checks if the specified coordinates represent a passage.
      *
@@ -100,6 +101,7 @@ public class BaseGenerator implements Generator {
     private boolean isPassage(int x, int y) {
         return x % 2 != 0 && y % 2 != 0;
     }
+
     /**
      * Checks if the specified coordinates are on the boundary of the maze.
      *
@@ -160,25 +162,18 @@ public class BaseGenerator implements Generator {
      * @param direction The direction to calculate.
      */
     public void calculateWallAndPassage(Cell point, Direction direction) {
-        xWall = calculateCoordinateX(point.coordinate().col(), direction, 1);
-        yWall = calculateCoordinateY(point.coordinate().row(), direction, 1);
-        xPassage = calculateCoordinateX(point.coordinate().col(), direction, 2);
-        yPassage = calculateCoordinateY(point.coordinate().row(), direction, 2);
+        xWall = calculateCoordinate(point.coordinate(), direction, 1, false);
+        yWall = calculateCoordinate(point.coordinate(), direction, 1, true);
+        xPassage = calculateCoordinate(point.coordinate(), direction, 2, false);
+        yPassage = calculateCoordinate(point.coordinate(), direction, 2, true);
     }
 
-    public int calculateCoordinateX(int value, Direction direction, int offset) {
+    protected int calculateCoordinate(Coordinate point, Direction direction, int offset, boolean isRow) {
         return switch (direction) {
-            case LEFT -> value - offset;
-            case RIGHT -> value + offset;
-            default -> value;
-        };
-    }
-
-    public int calculateCoordinateY(int value, Direction direction, int offset) {
-        return switch (direction) {
-            case UP -> value - offset;
-            case DOWN -> value + offset;
-            default -> value;
+            case UP -> isRow ? point.row() - offset : point.col();
+            case DOWN -> isRow ? point.row() + offset : point.col();
+            case LEFT -> isRow ? point.row() : point.col() - offset;
+            case RIGHT -> isRow ? point.row() : point.col() + offset;
         };
     }
 

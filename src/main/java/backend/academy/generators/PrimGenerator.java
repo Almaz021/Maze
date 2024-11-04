@@ -68,8 +68,8 @@ public class PrimGenerator extends BaseGenerator {
     private void collectCells(List<Cell> cells, Cell selectedCell) {
         for (Direction direction : Direction.values()) {
             if (checkPath(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
-                xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
-                yPassage = calculateCoordinateY(selectedCell.coordinate().row(), direction, 2);
+                xPassage = calculateCoordinate(selectedCell.coordinate(), direction, 2, false);
+                yPassage = calculateCoordinate(selectedCell.coordinate(), direction, 2, true);
                 if (!cells.contains(grid[yPassage][xPassage])) {
                     cells.add(grid[yPassage][xPassage]);
                 }
@@ -88,8 +88,8 @@ public class PrimGenerator extends BaseGenerator {
         for (Direction direction : Direction.values()) {
             if (checkIsPassage(grid[selectedCell.coordinate().row()][selectedCell.coordinate().col()], direction)) {
 
-                xPassage = calculateCoordinateX(selectedCell.coordinate().col(), direction, 2);
-                yPassage = calculateCoordinateY(selectedCell.coordinate().row(), direction, 2);
+                xPassage = calculateCoordinate(selectedCell.coordinate(), direction, 2, false);
+                yPassage = calculateCoordinate(selectedCell.coordinate(), direction, 2, true);
                 passages.add(grid[yPassage][xPassage]);
             }
         }
@@ -103,10 +103,10 @@ public class PrimGenerator extends BaseGenerator {
      * @return true if there is a passage in the specified direction; false otherwise.
      */
     private boolean checkIsPassage(Cell point, Direction direction) {
-        int localXWall = calculateCoordinateX(point.coordinate().col(), direction, 1);
-        int localYWall = calculateCoordinateY(point.coordinate().row(), direction, 1);
-        int localXPassage = calculateCoordinateX(point.coordinate().col(), direction, 2);
-        int localYPassage = calculateCoordinateY(point.coordinate().row(), direction, 2);
+        int localXWall = calculateCoordinate(point.coordinate(), direction, 1, false);
+        int localYWall = calculateCoordinate(point.coordinate(), direction, 1, true);
+        int localXPassage = calculateCoordinate(point.coordinate(), direction, 2, false);
+        int localYPassage = calculateCoordinate(point.coordinate(), direction, 2, true);
         return grid[localYWall][localXWall].type() == Type.WALL
             && grid[localYPassage][localXPassage].type() != Type.DEFAULT;
     }
