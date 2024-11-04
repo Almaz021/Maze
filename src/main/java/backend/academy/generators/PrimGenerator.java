@@ -46,9 +46,8 @@ public class PrimGenerator extends BaseGenerator {
             passages.clear();
 
             // Calculate the wall coordinates to create a passage
-            xWall = (int) ((long) selectedCell.coordinate().col() + passage.coordinate().col()) / 2;
-            yWall = (int) ((long) selectedCell.coordinate().row() + passage.coordinate().row()) / 2;
-
+            xWall = selectedCell.coordinate().col() / 2 + passage.coordinate().col() / 2 + 1;
+            yWall = selectedCell.coordinate().row() / 2 + passage.coordinate().row() / 2 + 1;
             setCell(createRandomCell(yWall, xWall));
 
             cells.remove(selectedCell);
